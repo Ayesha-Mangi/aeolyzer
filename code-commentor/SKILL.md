@@ -75,52 +75,6 @@ Use this when the code has **logic** in it — math, loops, conditionals, array 
 
 This mode goes **word by word, piece by piece**, traces real values through the code, and answers the "why" — not just the "what".
 
-**Structural elements of Mode 3:**
-
-**🔹 Opening** — Start with: "Let's break this down very slowly, word by word 👇" then show the full code block.
-
-**🧩 Line headers** — Each line or logical chunk gets a section header:
-```
-🧩 Line 1
-[the line of code in a code block]
-```
-
-**🔸 Word/piece annotations** — Under each line, annotate each meaningful piece:
-```
-🔸 `the-piece`
-- What this is in one sentence
-- What it does here specifically
-```
-
-**👉 Think:** — Use this callout for analogies or mental models:
-```
-👉 Think: "Make me an array from something"
-```
-
-**👉 Example:** — Use this callout when a concrete value makes it click:
-```
-👉 Example: If `rayCount = 5`, then { length: 5 } means → create array of size 5
-```
-
-**👉 Why?** — Use this callout to answer the "why does the code do this?" question:
-```
-👉 Why?
-Because a circle = 360°. You are dividing it into equal parts.
-```
-
-**Tables for tracing values** — When a loop or formula runs multiple times, show a table of what happens at each step:
-
-| i | Calculation | Result |
-|---|---|---|
-| 0 | (0 × 360) / 4 | 0° |
-| 1 | (1 × 360) / 4 | 90° |
-
-**🧩 Final Result** — Always close with what the code actually produces, shown as a concrete value:
-```
-🧩 Final Result
-If `rayCount = 4`:
-rays = [0, 90, 180, 270]
-```
 
 **When to switch to Mode 3 from Mode 1:**
 - The code contains a formula, calculation, or math → Mode 3

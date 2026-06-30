@@ -25,7 +25,7 @@ const settingsTabs = [
   "Billing",
   "Capabilities",
   "Connectors",
-  "Aeolyzer Code",
+  "Auditor Code",
 ]
 
 // -> This draws the main popup window containing all user settings
@@ -112,7 +112,7 @@ export function AeolyzerSettings({ isOpen, onClose, theme, onThemeChange }: Sett
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm mb-2" style={{ color: "#a3a29e" }}>What should Aeolyzer call you?</label>
+                    <label className="block text-sm mb-2" style={{ color: "#a3a29e" }}>What should Website Auditor AI call you?</label>
                     <input
                       type="text"
                       defaultValue="Muhammad"
@@ -135,7 +135,7 @@ export function AeolyzerSettings({ isOpen, onClose, theme, onThemeChange }: Sett
 
                 <div className="mt-4">
                   <label className="block text-sm mb-2" style={{ color: "#a3a29e" }}>
-                    What <span className="underline">personal preferences</span> should Aeolyzer consider in responses?
+                    What <span className="underline">personal preferences</span> should Website Auditor AI consider in responses?
                   </label>
                   <p className="text-xs mb-2" style={{ color: "#a3a29e" }}>
                     Your preferences will apply to all conversations, within <span className="underline">Anthropic&apos;s guidelines</span>.
@@ -275,7 +275,7 @@ export function AeolyzerSettings({ isOpen, onClose, theme, onThemeChange }: Sett
                   <div>
                     <p className="text-sm font-medium" style={{ color: "#e07b53" }}>Response completions</p>
                     <p className="text-sm mt-1" style={{ color: "#a3a29e" }}>
-                      Get notified when Aeolyzer has finished a response. Most useful for long-running tasks like tool calls and Research.
+                      Get notified when Website Auditor AI has finished a response. Most useful for long-running tasks like tool calls and Research.
                     </p>
                   </div>
                   <button

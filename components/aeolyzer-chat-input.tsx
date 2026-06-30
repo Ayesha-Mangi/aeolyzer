@@ -1,7 +1,7 @@
 "use client" // -> tells Next.js this code must run in the user's browser, allowing us to use interactive tools like text inputs
 
 import { useState, useRef, useEffect } from "react" // -> brings in core React tools for memory and side effects
-import { Plus, ChevronDown, PenLine, GraduationCap, Code2, Armchair, HardDrive } from "lucide-react" // -> brings in icons from the lucide package
+import { Plus, ChevronDown, Globe, Users, Calendar, HelpCircle, Code2, Sparkles } from "lucide-react" // -> brings in icons from the lucide package
 import { cn } from "@/lib/utils"
 
 // -> defines the shape of the data (props) the AeolyzerChatInput block expects
@@ -12,13 +12,14 @@ interface ChatInputProps {
   showQuickActions?: boolean // -> true/false switch to show those little suggested action buttons below the box
 }
 
-// -> a built-in list of the suggested actions users can click (like "Write", "Learn", etc)
+// -> a built-in list of the suggested actions users can click (website auditor specific)
 const quickActions = [
-  { icon: PenLine, label: "Write" },
-  { icon: GraduationCap, label: "Learn" },
-  { icon: Code2, label: "Code" },
-  { icon: Armchair, label: "Life stuff" },
-  { icon: HardDrive, label: "From Drive", hasIcon: true },
+  { icon: Globe, label: "Audit Homepage", prompt: "Audit the homepage of my website and check for general SEO/performance warnings." },
+  { icon: Users, label: "Analyze Competitors", prompt: "Run a competitor analysis to benchmark my SEO/AEO scores against major players." },
+  { icon: Calendar, label: "Generate Content Plan", prompt: "Generate a 30-day topical authority content plan for my target keywords." },
+  { icon: HelpCircle, label: "Generate FAQ Schema", prompt: "Generate rich FAQ schema JSON-LD for my core service pages." },
+  { icon: Code2, label: "Generate Meta Tags", prompt: "Generate search engine optimized meta title and description tags." },
+  { icon: Sparkles, label: "Improve AEO Visibility", prompt: "Explain how to improve my visibility in AI answer engines (ChatGPT/Claude)." },
 ]
 
 // -> This is the main text box at the bottom where users type their messages
@@ -267,7 +268,8 @@ export function AeolyzerChatInput({ onSend, isGenerating, placeholder = "How can
           {quickActions.map((action, index) => (
             <button
               key={index}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors hover:bg-[#252422]"
+              onClick={() => onSend(action.prompt)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors hover:bg-[#252422] cursor-pointer"
               style={{ 
                 backgroundColor: "#2b2a27", 
                 color: "#ececec",

@@ -13,8 +13,8 @@ const _rokkitt = Rokkitt({
 });
 
 export const metadata: Metadata = {
-  title: 'AEOlyzer',
-  description: 'Talk to AEOlyzer, your intelligent AI assistant',
+  title: 'Website Auditor AI',
+  description: 'Website Auditor Multi-Agent System',
   generator: 'v0.app',
   icons: {
     icon: [

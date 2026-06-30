@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { 
   Plus, 
   Search, 
@@ -18,9 +19,11 @@ import {
   Gift,
   BookOpen,
   LogOut,
-  MoreHorizontal
+  MoreHorizontal,
+  LayoutDashboard
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { AeolyzerLogo } from "./aeolyzer-logo"
 
 // -> defines the shape of the data (props) the AeolyzerSidebar block expects to receive
 // - `isOpen` -> true/false switch telling us if the sidebar is expanded (wide) or collapsed (narrow)
@@ -107,22 +110,18 @@ export function AeolyzerSidebar({ isOpen, onToggle, onNewChat, currentChatTitle,
       style={{ backgroundColor: "#2b2a27" }}
     >
       {/* Top section */}
-      <div className="flex items-center justify-between p-3 flex-shrink-0">
+      <div className="flex items-center justify-between p-4 flex-shrink-0 border-b border-[#3a3936] h-14">
         {isOpen ? (
           <>
-            <span className="text-lg font-medium" style={{ color: "#d4d4d0" }}>AEOlyzer</span>
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <AeolyzerLogo size={22} />
+              <span className="text-sm font-semibold tracking-wide text-[#ececec] truncate">
+                Website Auditor AI
+              </span>
+            </Link>
             <button
               onClick={onToggle}
-              className="p-1.5 rounded-md transition-colors"
-              style={{ color: "#6b6b66" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#252422"
-                e.currentTarget.style.color = "#a3a29e"
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent"
-                e.currentTarget.style.color = "#6b6b66"
-              }}
+              className="p-1.5 rounded-md transition-colors text-[#6b6b66] hover:bg-[#252422] hover:text-[#a3a29e]"
             >
               <SidebarToggleIcon isOpen={true} />
             </button>
@@ -130,16 +129,7 @@ export function AeolyzerSidebar({ isOpen, onToggle, onNewChat, currentChatTitle,
         ) : (
           <button
             onClick={onToggle}
-            className="p-1.5 rounded-md transition-colors mx-auto"
-            style={{ color: "#6b6b66" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#252422"
-              e.currentTarget.style.color = "#a3a29e"
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent"
-              e.currentTarget.style.color = "#6b6b66"
-            }}
+            className="p-1.5 rounded-md transition-colors text-[#6b6b66] mx-auto hover:bg-[#252422] hover:text-[#a3a29e]"
           >
             <SidebarToggleIcon isOpen={false} />
           </button>
@@ -147,13 +137,32 @@ export function AeolyzerSidebar({ isOpen, onToggle, onNewChat, currentChatTitle,
       </div>
 
       {/* Navigation items - fixed */}
-      <nav className="px-2 flex-shrink-0">
+      <nav className="px-2 py-3 flex-shrink-0 space-y-1.5">
+        {/* Back to Dashboard */}
+        <Link
+          href="/dashboard"
+          className={cn(
+            "flex items-center w-full rounded-lg transition-colors font-semibold",
+            isOpen ? "gap-3 px-3 py-2" : "justify-center p-2"
+          )}
+          style={{ color: "#e07b53" }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#e07b5310"
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent"
+          }}
+        >
+          <LayoutDashboard size={18} strokeWidth={1.75} />
+          {isOpen && <span className="text-sm">Back to Dashboard</span>}
+        </Link>
+
         {/* New Chat */}
         <button
           onClick={onNewChat}
           className={cn(
-            "flex items-center w-full rounded-lg transition-colors",
-            isOpen ? "gap-3 px-3 py-1.5" : "justify-center p-2"
+            "flex items-center w-full rounded-lg transition-colors font-medium",
+            isOpen ? "gap-3 px-3 py-2" : "justify-center p-2"
           )}
           style={{ color: sidebarTextColor }}
           onMouseEnter={(e) => {
@@ -165,7 +174,7 @@ export function AeolyzerSidebar({ isOpen, onToggle, onNewChat, currentChatTitle,
             e.currentTarget.style.color = sidebarTextColor
           }}
         >
-          <Plus size={18} strokeWidth={1.5} />
+          <Plus size={18} strokeWidth={1.75} />
           {isOpen && <span className="text-sm">New chat</span>}
         </button>
 
@@ -439,7 +448,7 @@ export function AeolyzerSidebar({ isOpen, onToggle, onNewChat, currentChatTitle,
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
                 <Gift size={16} strokeWidth={1.5} />
-                <span>Gift AEOlyzer</span>
+                <span>Gift Auditor AI</span>
               </button>
               
               <button

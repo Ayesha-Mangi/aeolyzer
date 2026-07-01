@@ -23,11 +23,19 @@ import {
   Trash2,
   ToggleLeft,
   ToggleRight,
-  Play
+  Play,
+  Activity,
+  Users,
+  BarChart3,
+  Clock,
+  ArrowUpRight,
+  ArrowDownRight,
+  Settings
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useDashboard } from "@/lib/context/dashboard-context"
 import { AeolyzerLogo, AeolyzerLogoAnimated } from "@/components/aeolyzer-logo"
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
 
 // Reuse the checklist items configuration from Phase 2.5
 interface ChecklistItem {
@@ -42,214 +50,206 @@ interface ChecklistItem {
 // SUBCOMPONENT: GETTING STARTED DASHBOARD
 // ----------------------------------------------------
 function GettingStartedDashboard() {
-  const checklistItems: ChecklistItem[] = [
-    {
-      id: 1,
-      title: "Website Information",
-      description: "Review your website URL and business details before starting your first audit.",
-      actionLabel: "Review Information",
-      icon: Globe
-    },
-    {
-      id: 2,
-      title: "Run Your First Website Audit",
-      description: "Scan your website for SEO, AEO, performance and technical issues.",
-      actionLabel: "Start Audit",
-      icon: FileCheck
-    },
-    {
-      id: 3,
-      title: "Analyze Competitors",
-      description: "Compare your website with competitors and discover new opportunities.",
-      actionLabel: "Analyze",
-      icon: Search
-    },
-    {
-      id: 4,
-      title: "Generate AI Content",
-      description: "Create SEO and AEO optimized content using AI.",
-      actionLabel: "Generate Content",
-      icon: Sparkles
-    },
-    {
-      id: 5,
-      title: "Review Recommendations",
-      description: "View AI-generated recommendations to improve rankings and visibility.",
-      actionLabel: "View Recommendations",
-      icon: Cpu
-    },
-    {
-      id: 6,
-      title: "Download First Report",
-      description: "Export your first Website Audit Report.",
-      actionLabel: "Download Report",
-      icon: Download
-    }
-  ]
+  const [loading, setLoading] = useState(true);
 
-  const [completed, setCompleted] = useState<Record<number, boolean>>({
-    1: true, // Mark step 1 completed automatically from onboarding inputs
-    2: true, // Mark step 2 completed (first report crawled)
-    3: false,
-    4: false,
-    5: false,
-    6: false
-  })
-  const [expandedId, setExpandedId] = useState<number | null>(3) // start on step 3 since 1 and 2 are pre-done
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const toggleCheckbox = (id: number, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setCompleted(prev => ({ ...prev, [id]: !prev[id] }))
+  const chartData = [
+    { name: 'Mon', score: 65, audits: 12 },
+    { name: 'Tue', score: 68, audits: 18 },
+    { name: 'Wed', score: 75, audits: 25 },
+    { name: 'Thu', score: 72, audits: 20 },
+    { name: 'Fri', score: 85, audits: 35 },
+    { name: 'Sat', score: 82, audits: 30 },
+    { name: 'Sun', score: 90, audits: 45 },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-full w-full bg-[#2b2a27] text-[#ececec] p-6 md:p-8 space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <div className="h-8 w-48 bg-[#393836]/40 rounded-lg animate-pulse" />
+            <div className="h-4 w-64 bg-[#393836]/20 rounded-lg animate-pulse" />
+          </div>
+          <div className="flex gap-2">
+            <div className="h-9 w-28 bg-[#393836]/40 rounded-lg animate-pulse" />
+            <div className="h-9 w-28 bg-[#e07b53]/40 rounded-lg animate-pulse" />
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-28 bg-[#393836]/20 border border-[#3a3936] rounded-2xl animate-pulse" />
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 h-80 bg-[#393836]/20 border border-[#3a3936] rounded-2xl animate-pulse" />
+          <div className="h-80 bg-[#393836]/20 border border-[#3a3936] rounded-2xl animate-pulse" />
+        </div>
+      </div>
+    );
   }
-
-  const toggleAccordion = (id: number) => {
-    setExpandedId(prev => (prev === id ? null : id))
-  }
-
-  const completedCount = Object.values(completed).filter(Boolean).length
-  const progressPercent = Math.round((completedCount / checklistItems.length) * 100)
 
   return (
-    <div className="min-h-full w-full bg-[#2b2a27] text-[#ececec] px-4 py-12 md:py-20 select-none overflow-y-auto">
-      <div className="max-w-2xl mx-auto flex flex-col items-center space-y-10">
-        
-        {/* Floating Square */}
-        <div className="w-12 h-12 rounded-xl border border-[#4a4945] bg-[#393836]/40 flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-200">
-          <AeolyzerLogo size={22} />
-        </div>
-
-        {/* Header / Intro section */}
-        <div className="text-center space-y-3">
-          <h1 
-            className="font-light tracking-tight text-3xl md:text-4xl text-[#b8977e]"
-            style={{ fontFamily: "var(--font-display), 'Rokkitt', Georgia, serif" }}
-          >
-            Welcome to Website Auditor AI
+    <div className="min-h-full w-full bg-[#2b2a27] text-[#ececec] p-6 md:p-8 space-y-6 animate-fade-in-up">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#b8977e]" style={{ fontFamily: "var(--font-display), 'Rokkitt', Georgia, serif" }}>
+            Dashboard Overview
           </h1>
-          <div className="space-y-1 text-sm text-[#a3a29e] max-w-lg mx-auto leading-relaxed">
-            <p className="font-semibold text-[#ececec]">Welcome! Your workspace is almost ready.</p>
-            <p className="font-light">
-              Complete the following checklist to generate your first Website Audit and unlock your AI workspace.
-            </p>
+          <p className="text-sm text-[#a3a29e] font-light mt-1">Welcome back. Here is what's happening with your workspace today.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#393836]/40 border border-[#4a4945] hover:border-[#e07b53] rounded-lg text-xs font-semibold transition-colors">
+            <Download size={14} />
+            Export Report
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#e07b53] hover:bg-[#c45e2e] text-[#2b2a27] rounded-lg text-xs font-bold shadow-md transition-colors">
+            <Plus size={14} />
+            New Audit
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-3 hover:border-[#4a4945] transition-colors cursor-default">
+          <div className="flex items-center justify-between text-[#a3a29e]">
+            <h3 className="text-xs font-semibold tracking-wide uppercase">Avg Audit Score</h3>
+            <Activity size={16} className="text-[#e07b53]" />
+          </div>
+          <div className="flex items-end gap-2">
+            <span className="text-3xl font-bold text-[#ececec]">92</span>
+            <span className="text-xs text-emerald-400 font-medium flex items-center mb-1 bg-emerald-400/10 px-1.5 py-0.5 rounded"><ArrowUpRight size={12} className="mr-0.5"/> 4%</span>
+          </div>
+        </div>
+        
+        <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-3 hover:border-[#4a4945] transition-colors cursor-default">
+          <div className="flex items-center justify-between text-[#a3a29e]">
+            <h3 className="text-xs font-semibold tracking-wide uppercase">Total Audits</h3>
+            <FileCheck size={16} className="text-[#e07b53]" />
+          </div>
+          <div className="flex items-end gap-2">
+            <span className="text-3xl font-bold text-[#ececec]">1,284</span>
+            <span className="text-xs text-emerald-400 font-medium flex items-center mb-1 bg-emerald-400/10 px-1.5 py-0.5 rounded"><ArrowUpRight size={12} className="mr-0.5"/> 12%</span>
           </div>
         </div>
 
-        {/* Progress Card (Showing completion of the first audit) */}
-        <div className="w-full p-4 rounded-xl border border-[#3a3936] bg-emerald-950/20 border-emerald-500/10 flex items-center gap-4 transition-all duration-300">
-          <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-950/30 text-emerald-400">
-            <Check size={18} strokeWidth={2.5} />
+        <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-3 hover:border-[#4a4945] transition-colors cursor-default">
+          <div className="flex items-center justify-between text-[#a3a29e]">
+            <h3 className="text-xs font-semibold tracking-wide uppercase">Active Agents</h3>
+            <Cpu size={16} className="text-[#e07b53]" />
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-xs font-semibold text-emerald-400">First audit generated successfully!</h3>
-            <p className="text-[10px] text-emerald-500/80 truncate mt-0.5">Initial search indices and core meta metrics have been cataloged.</p>
+          <div className="flex items-end gap-2">
+            <span className="text-3xl font-bold text-[#ececec]">8</span>
+            <span className="text-xs text-[#a3a29e] font-medium mb-1">/ 10 running</span>
           </div>
         </div>
 
-        {/* Getting Started Main Onboarding Card */}
-        <div className="w-full p-6 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-6 shadow-xl">
-          
-          {/* Onboarding Summary & Progress Indicator */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#e07b53]/5 text-[#e07b53]">
-                <ListTodo size={22} strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold text-[#ececec]">Getting Started with Website Auditing</h2>
-                <p className="text-[11px] text-[#a3a29e] mt-0.5">{completedCount} of 6 completed</p>
-              </div>
-            </div>
+        <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-3 hover:border-[#4a4945] transition-colors cursor-default">
+          <div className="flex items-center justify-between text-[#a3a29e]">
+            <h3 className="text-xs font-semibold tracking-wide uppercase">Workflow Status</h3>
+            <CheckCircle2 size={16} className="text-emerald-400" />
+          </div>
+          <div className="flex items-end gap-2">
+            <span className="text-3xl font-bold text-[#ececec]">Healthy</span>
+            <span className="text-xs text-emerald-400 font-medium mb-1 bg-emerald-400/10 px-1.5 py-0.5 rounded">All systems operational</span>
+          </div>
+        </div>
+      </div>
 
-            {/* Thin Progress Bar */}
-            <div className="space-y-1">
-              <div className="w-full h-1.5 rounded-full bg-[#2b2a27] overflow-hidden">
-                <div 
-                  className="bg-[#e07b53] h-full rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${progressPercent}%` }}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Chart */}
+        <div className="lg:col-span-2 p-5 md:p-6 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-semibold text-[#ececec]">Audit Score Trends</h3>
+            <select className="bg-[#2b2a27] border border-[#4a4945] rounded-lg text-xs px-3 py-1.5 text-[#a3a29e] outline-none hover:border-[#e07b53] transition-colors cursor-pointer">
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>This Year</option>
+            </select>
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#e07b53" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#e07b53" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#3a3936" vertical={false} />
+                <XAxis dataKey="name" stroke="#6b6b66" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="#6b6b66" fontSize={11} tickLine={false} axisLine={false} dx={-10} />
+                <RechartsTooltip 
+                  contentStyle={{ backgroundColor: '#2b2a27', borderColor: '#4a4945', color: '#ececec', borderRadius: '8px', fontSize: '12px' }}
+                  itemStyle={{ color: '#e07b53', fontWeight: 600 }}
+                  cursor={{ stroke: '#4a4945', strokeWidth: 1, strokeDasharray: '4 4' }}
                 />
-              </div>
+                <Area type="monotone" dataKey="score" stroke="#e07b53" strokeWidth={2} fillOpacity={1} fill="url(#colorScore)" activeDot={{ r: 6, fill: "#e07b53", stroke: "#2b2a27", strokeWidth: 2 }} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Recent Activity & Quick Actions */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-4">
+            <h3 className="text-sm font-semibold text-[#ececec]">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-[#4a4945] bg-[#393836]/40 hover:bg-[#393836] hover:border-[#e07b53] transition-all text-[#ececec] group">
+                <Search size={18} className="text-[#a3a29e] group-hover:text-[#e07b53] transition-colors" />
+                <span className="text-[11px] font-medium">Deep Scan</span>
+              </button>
+              <button className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-[#4a4945] bg-[#393836]/40 hover:bg-[#393836] hover:border-[#e07b53] transition-all text-[#ececec] group">
+                <Users size={18} className="text-[#a3a29e] group-hover:text-[#e07b53] transition-colors" />
+                <span className="text-[11px] font-medium">Competitors</span>
+              </button>
+              <button className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-[#4a4945] bg-[#393836]/40 hover:bg-[#393836] hover:border-[#e07b53] transition-all text-[#ececec] group">
+                <Sparkles size={18} className="text-[#a3a29e] group-hover:text-[#e07b53] transition-colors" />
+                <span className="text-[11px] font-medium">AI Writer</span>
+              </button>
+              <button className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-[#4a4945] bg-[#393836]/40 hover:bg-[#393836] hover:border-[#e07b53] transition-all text-[#ececec] group">
+                <Settings size={18} className="text-[#a3a29e] group-hover:text-[#e07b53] transition-colors" />
+                <span className="text-[11px] font-medium">Settings</span>
+              </button>
             </div>
           </div>
 
-          {/* Checklist Items Accordion List */}
-          <div className="divide-y divide-[#3a3936]/40 border-t border-[#3a3936]/40">
-            {checklistItems.map((item) => {
-              const isExpanded = expandedId === item.id
-              const isDone = completed[item.id]
-              const ItemIcon = item.icon
-
-              return (
-                <div 
-                  key={item.id}
-                  onClick={() => toggleAccordion(item.id)}
-                  className={cn(
-                    "py-3.5 transition-all duration-200 cursor-pointer group",
-                    isExpanded ? "bg-[#393836]/5 px-2 rounded-xl border border-[#3a3936]/10 my-1 first:mt-0 last:mb-0" : ""
-                  )}
-                >
-                  {/* Accordion Header */}
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      {/* Checkbox button */}
-                      <button
-                        onClick={(e) => toggleCheckbox(item.id, e)}
-                        className="flex-shrink-0 focus:outline-none transition-transform hover:scale-110 duration-150"
-                      >
-                        {isDone ? (
-                          <CheckCircle2 size={18} className="text-[#e07b53] fill-[#e07b53]/10" />
-                        ) : (
-                          <Circle size={18} className="text-[#6b6b66] hover:text-[#e07b53] transition-colors" />
-                        )}
-                      </button>
-
-                      {/* Header Title */}
-                      <span className={cn(
-                        "text-xs font-semibold tracking-wide transition-colors",
-                        isDone ? "text-[#a3a29e] line-through font-light" : "text-[#ececec] group-hover:text-[#d4d4d4]"
-                      )}>
-                        {item.title}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3 pl-2">
-                      <ItemIcon size={14} className={cn(
-                        isDone ? "text-[#6b6b66]/60" : "text-[#a3a29e] group-hover:text-[#e07b53] transition-colors"
-                      )} />
-                      <div className="text-[#6b6b66]">
-                        {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                      </div>
-                    </div>
+          {/* Activity Log */}
+          <div className="p-5 rounded-2xl border border-[#3a3936] bg-[#393836]/20 space-y-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-[#ececec]">Recent Activity</h3>
+              <button className="text-[11px] text-[#e07b53] hover:text-[#ff9a6f] font-medium transition-colors">View All</button>
+            </div>
+            <div className="space-y-4">
+              {[
+                { title: "SEO Audit Completed", desc: "example.com scored 92", time: "10m ago", icon: FileCheck, color: "text-emerald-400", bg: "bg-emerald-400/10" },
+                { title: "Competitor Analysis", desc: "Found 3 new keyword gaps", time: "2h ago", icon: Search, color: "text-[#e07b53]", bg: "bg-[#e07b53]/10" },
+                { title: "Content Generated", desc: "Blog post: '10 SEO Tips'", time: "5h ago", icon: Sparkles, color: "text-blue-400", bg: "bg-blue-400/10" },
+                { title: "Weekly Report", desc: "Sent to admin@acme.com", time: "1d ago", icon: Clock, color: "text-purple-400", bg: "bg-purple-400/10" }
+              ].map((activity, i) => (
+                <div key={i} className="flex gap-3 items-start relative before:absolute before:left-[15px] before:top-[32px] before:bottom-[-16px] before:w-[2px] before:bg-[#3a3936] last:before:hidden">
+                  <div className={`p-2 rounded-full ${activity.bg} ${activity.color} shrink-0 z-10 ring-4 ring-[#2b2a27]`}>
+                    <activity.icon size={14} />
                   </div>
-
-                  {/* Accordion Expandable Content Panel */}
-                  {isExpanded && (
-                    <div className="pl-7 mt-2 space-y-3.5 pr-2 animate-fade-in-up">
-                      <p className="text-[11px] text-[#a3a29e] leading-relaxed font-light">
-                        {item.description}
-                      </p>
-                      <div>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setCompleted(prev => ({ ...prev, [item.id]: true }))
-                            if (item.id < 6) {
-                              setExpandedId(item.id + 1)
-                            }
-                          }}
-                          className="px-3.5 py-1.5 rounded-lg text-[10px] font-semibold bg-[#393836] hover:bg-[#252422] text-[#ececec] border border-[#4a4945] transition-all hover:border-[#e07b53] shadow-sm cursor-pointer"
-                        >
-                          {item.actionLabel}
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  <div className="pt-0.5">
+                    <p className="text-xs font-semibold text-[#ececec]">{activity.title}</p>
+                    <p className="text-[11px] text-[#a3a29e] mt-0.5">{activity.desc}</p>
+                    <p className="text-[10px] text-[#6b6b66] mt-1">{activity.time}</p>
+                  </div>
                 </div>
-              )
-            })}
+              ))}
+            </div>
           </div>
-
         </div>
-
       </div>
     </div>
   )
